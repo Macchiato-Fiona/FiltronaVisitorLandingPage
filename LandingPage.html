@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Filtrona Visitor Portal</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #e6f0ff, #ffffff);
+      color: #333;
+      margin: 0;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1 {
+      font-size: 32px;
+      margin-bottom: 10px;
+      color: #004578;
+    }
+
+    p.subtitle {
+      font-size: 18px;
+      margin-bottom: 30px;
+      color: #666;
+    }
+
+    .button-group {
+      display: flex;
+      flex-direction: row;
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+
+    .button {
+      font-size: 20px;
+      padding: 16px 32px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: transform 0.2s ease, background-color 0.3s ease;
+      min-width: 160px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .button:hover {
+      transform: scale(1.05);
+    }
+
+    .checkin {
+      background-color: #0078d4;
+      color: white;
+    }
+
+    .checkin:hover {
+      background-color: #005a9e;
+    }
+
+    .checkout {
+      background-color: #107c10;
+      color: white;
+    }
+
+    .checkout:hover {
+      background-color: #0b6a0b;
+    }
+
+    .info-box {
+      background-color: #ffffff;
+      border-left: 5px solid #0078d4;
+      padding: 20px;
+      max-width: 600px;
+      text-align: left;
+      font-size: 16px;
+      line-height: 1.6;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .info-box h2 {
+      color: #004578;
+      margin-top: 0;
+    }
+
+    @media screen and (max-width: 600px) {
+      .button-group {
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Welcome to Filtrona Visitor Log System</h1>
+  <p class="subtitle">Please select an action below:</p>
+
+  <div class="button-group">
+    <button class="button checkin" onclick="window.location.href='https://forms.office.com/YOUR_CHECKIN_FORM'">
+      🚪 Check In
+    </button>
+    <button class="button checkout" onclick="window.location.href='https://forms.office.com/YOUR_CHECKOUT_FORM'">
+      ✅ Check Out
+    </button>
+  </div>
+
+  <div class="info-box">
+    <h2>Before You Begin</h2>
+    <ul>
+      <li>Please make sure to check out when leaving the facility.</li>
+      <li>If you encounter issues, contact <a href="mailto:reception@filtrona.com">reception@filtrona.com</a>.</li>
+      <li>For large groups, each visitor must check in individually.</li>
+    </ul>
+    <p><strong>Need help?</strong> Please approach our reception desk or scan the QR code at the entrance again.</p>
+  </div>
+
+</body>
+</html>

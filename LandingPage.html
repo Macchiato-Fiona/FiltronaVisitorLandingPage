@@ -16,6 +16,11 @@
       align-items: center;
     }
 
+    img.logo {
+      max-height: 80px;
+      margin-bottom: 20px;
+    }
+
     h1 {
       font-size: 32px;
       margin-bottom: 10px;
@@ -44,6 +49,9 @@
       transition: transform 0.2s ease, background-color 0.3s ease;
       min-width: 160px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .button:hover {
@@ -51,21 +59,13 @@
     }
 
     .checkin {
-      background-color: #0078d4;
+      background-color: rgba(129, 195, 66, 1);
       color: white;
-    }
-
-    .checkin:hover {
-      background-color: #005a9e;
     }
 
     .checkout {
-      background-color: #107c10;
+      background-color: rgba(0, 150, 218, 1);
       color: white;
-    }
-
-    .checkout:hover {
-      background-color: #0b6a0b;
     }
 
     .info-box {
@@ -98,26 +98,28 @@
 </head>
 <body>
 
+  <!-- 🔽 Replace the src below with the correct public image URL if hosting on GitHub or Netlify -->
+  <img class="logo" src="images/FiltronaLogo.png" alt="Filtrona Logo" />
+
   <h1>Welcome to Filtrona Visitor Log System</h1>
   <p class="subtitle">Please select an action below:</p>
 
   <div class="button-group">
     <button class="button checkin" onclick="window.location.href='https://forms.office.com/YOUR_CHECKIN_FORM'">
-      🚪 Check In
+      🟢 Check In
     </button>
     <button class="button checkout" onclick="window.location.href='https://forms.office.com/YOUR_CHECKOUT_FORM'">
-      ✅ Check Out
+      🔲 Check Out
     </button>
   </div>
 
   <div class="info-box">
     <h2>Before You Begin</h2>
     <ul>
-      <li>Please make sure to check out when leaving the facility.</li>
-      <li>If you encounter issues, contact <a href="mailto:reception@filtrona.com">reception@filtrona.com</a>.</li>
-      <li>For large groups, each visitor must check in individually.</li>
+      <li>Please ensure each visitor checks in individually.</li>
+      <li>Remember to check out before leaving the building.</li>
+      <li>Need help? Contact <a href="mailto:reception@filtrona.com">reception@filtrona.com</a>.</li>
     </ul>
-    <p><strong>Need help?</strong> Please approach our reception desk or scan the QR code at the entrance again.</p>
   </div>
 
 </body>

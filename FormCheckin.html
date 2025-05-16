@@ -1,36 +1,200 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Visitor Check-In</title>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <title>Filtrona Visitor Check-In</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
-    body { font-family: Arial; max-width: 500px; margin: 2rem auto; }
-    label, input { display: block; margin-top: 10px; }
-    button { margin-top: 20px; padding: 10px 20px; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #e6f0ff, #ffffff);
+      color: #333;
+      margin: 0;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .logo {
+      max-height: 80px;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      color: #004578;
+      font-size: 32px;
+      margin-bottom: 5px;
+      text-align: center;
+    }
+
+    .subtitle {
+      font-size: 18px;
+      color: #666;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    form {
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 640px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    label {
+      width: 100%;
+      font-weight: bold;
+      margin-top: 15px;
+      text-align: left;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+
+    .help-text {
+      font-size: 13px;
+      color: #666;
+      margin-top: 2px;
+      margin-bottom: 10px;
+      width: 100%;
+      text-align: left;
+    }
+
+    button {
+      margin-top: 25px;
+      padding: 12px 24px;
+      font-size: 18px;
+      background-color: rgba(129, 195, 66, 1);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #76b33f;
+    }
+
+    .success {
+      margin-top: 20px;
+      font-weight: bold;
+      color: #107c10;
+    }
+
+    .error {
+      color: red;
+      font-size: 14px;
+      margin-top: 5px;
+    }
+
+    .email-match {
+      font-size: 16px;
+      margin-top: 5px;
+      text-align: left;
+      width: 100%;
+    }
+
+    .email-match.valid {
+      color: green;
+    }
+
+    .email-match.invalid {
+      color: red;
+    }
   </style>
 </head>
 <body>
 
-  <h2>Visitor Check-In</h2>
+  <!-- ✅ Logo -->
+  <img class="logo" src="Filtrona_removebg.png" alt="Filtrona Logo" />
+
+  <h1>Visitor Check-In</h1>
+  <p class="subtitle">Please complete the form accurately to check in</p>
+
   <form id="checkinForm">
-    <label>Name: <input type="text" id="VisitorName" required></label>
-    <label>Company: <input type="text" id="Company" required></label>
-    <label>Email: <input type="email" id="Email" required></label>
-    <label>Phone (optional): <input type="text" id="PhoneNumber"></label>
-    <label>Host Name: <input type="text" id="HostName" required></label>
-    <button type="submit">Submit</button>
+    <label for="VisitorName">Name:</label>
+    <input type="text" id="VisitorName" required>
+    <div class="help-text">Enter your full legal name.</div>
+
+    <label for="Company">Company:</label>
+    <input type="text" id="Company" required>
+    <div class="help-text">Enter the company you're representing.</div>
+
+    <label for="Email">Email:</label>
+    <input type="email" id="Email" required>
+    <div class="help-text">Provide a valid email for contact and check-out link.</div>
+
+    <label for="ReEmail">Re-enter Email:</label>
+    <input type="email" id="ReEmail" required>
+    <div id="emailStatus" class="email-match"></div>
+
+    <label for="PhoneNumber">Phone (optional):</label>
+    <input type="text" id="PhoneNumber">
+    <div class="help-text">Optional: enter a mobile number for contact if needed.</div>
+
+    <label for="HostName">Host Name:</label>
+    <input type="text" id="HostName" required>
+    <div class="help-text">Who are you visiting? Enter their full name if possible.</div>
+
+    <button type="submit">Check In</button>
   </form>
 
-  <div id="result" style="margin-top:20px; font-weight:bold;"></div>
+  <div id="result" class="success"></div>
 
   <script>
+    const emailInput = document.getElementById("Email");
+    const reEmailInput = document.getElementById("ReEmail");
+    const emailStatus = document.getElementById("emailStatus");
+
+    function checkEmailMatch() {
+      const email = emailInput.value.trim().toLowerCase();
+      const reEmail = reEmailInput.value.trim().toLowerCase();
+
+      if (reEmail === "") {
+        emailStatus.textContent = "";
+        return;
+      }
+
+      if (email === reEmail) {
+        emailStatus.textContent = "✅ Emails match";
+        emailStatus.className = "email-match valid";
+      } else {
+        emailStatus.textContent = "❌ Emails do not match";
+        emailStatus.className = "email-match invalid";
+      }
+    }
+
+    reEmailInput.addEventListener("input", checkEmailMatch);
+    emailInput.addEventListener("input", checkEmailMatch);
+
     document.getElementById("checkinForm").addEventListener("submit", async function(e) {
       e.preventDefault();
+
+      const email = emailInput.value;
+      const reEmail = reEmailInput.value;
+
+      if (email.trim().toLowerCase() !== reEmail.trim().toLowerCase()) {
+        alert("❌ Emails do not match. Please check again.");
+        return;
+      }
 
       const body = {
         VisitorName: document.getElementById("VisitorName").value,
         Company: document.getElementById("Company").value,
-        Email: document.getElementById("Email").value,
+        Email: email,
         PhoneNumber: document.getElementById("PhoneNumber").value,
         HostName: document.getElementById("HostName").value,
         SiteCode: "SG01"
@@ -44,7 +208,9 @@
 
       const result = await res.json();
       document.getElementById("result").textContent =
-        `✅ Check-In Successful. Your Visiting ID is ${result.VisitingID}`;
+        `✅ Check-In Successful. Your Visiting ID is: ${result.VisitingID}`;
+      document.getElementById("checkinForm").reset();
+      emailStatus.textContent = "";
     });
   </script>
 

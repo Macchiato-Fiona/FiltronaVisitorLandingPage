@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Visitor Check-In</title>
+  <meta charset="UTF-8">
+  <style>
+    body { font-family: Arial; max-width: 500px; margin: 2rem auto; }
+    label, input { display: block; margin-top: 10px; }
+    button { margin-top: 20px; padding: 10px 20px; }
+  </style>
+</head>
+<body>
+
+  <h2>Visitor Check-In</h2>
+  <form id="checkinForm">
+    <label>Name: <input type="text" id="VisitorName" required></label>
+    <label>Company: <input type="text" id="Company" required></label>
+    <label>Email: <input type="email" id="Email" required></label>
+    <label>Phone (optional): <input type="text" id="PhoneNumber"></label>
+    <label>Host Name: <input type="text" id="HostName" required></label>
+    <button type="submit">Submit</button>
+  </form>
+
+  <div id="result" style="margin-top:20px; font-weight:bold;"></div>
+
+  <script>
+    document.getElementById("checkinForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+
+      const body = {
+        VisitorName: document.getElementById("VisitorName").value,
+        Company: document.getElementById("Company").value,
+        Email: document.getElementById("Email").value,
+        PhoneNumber: document.getElementById("PhoneNumber").value,
+        HostName: document.getElementById("HostName").value,
+        SiteCode: "SG01"
+      };
+
+      const res = await fetch("https://fionaaa.pythonanywhere.com/checkin", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+
+      const result = await res.json();
+      document.getElementById("result").textContent =
+        `✅ Check-In Successful. Your Visiting ID is ${result.VisitingID}`;
+    });
+  </script>
+
+</body>
+</html>

@@ -126,7 +126,7 @@
 
   <form id="checkinForm">
     <label for="VisitorName">Visitor Name:</label>
-    <input type="text" id="Visito1rName" required>
+    <input type="text" id="VisitorName" required>
     <div class="help-text">e.g. Fiona Cosimo WRIGHT - Full name with first letter and Last Name CAPITALIZED</div>
 
     <label for="Company">Company Name:</label>
@@ -223,18 +223,15 @@
       const result = await res.json();
       const url = `ThankYou-Checkin.html?visid=${encodeURIComponent(result.VisitingID)}&name=${encodeURIComponent(body.VisitorName)}&email=${encodeURIComponent(email)}`;
       window.location.href = url;
-      
+      return;
+
   //     if (result.VisitingID) {
   //       const url = `ThankYou-Checkin.html?visid=${encodeURIComponent(result.VisitingID)}&name=${encodeURIComponent(body.VisitorName)}&email=${encodeURIComponent(email)}`;
   //       window.location.href = url;
   //     } else {
   //       alert("Something went wrong. Please try again.");
   // }
-
-
-
-      document.getElementById("result").textContent =
-        `✅ Check-In Successful. Your Visiting ID is: ${result.VisitingID}`;
+  
       document.getElementById("checkinForm").reset();
       emailStatus.textContent = "";
     });

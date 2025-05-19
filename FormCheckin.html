@@ -156,7 +156,7 @@
   </form>
   
   <p style="text-align:center; margin-top: 30px;">
-    <a href="https://macchiato-fiona.github.io/FiltronaVisitorLandingPage/LandingPage.html">⬅️ Back to Landing Page</a>
+    <a href="https://macchiato-fiona.github.io/FiltronaVisitorLandingPage/LandingPage.html"> << Back to Landing Page</a>
   </p>
 
 
@@ -215,8 +215,9 @@
       });
 
       const result = await res.json();
-      const url = `ThankYou.html?visid=${encodeURIComponent(result.VisitingID)}&name=${encodeURIComponent(document.getElementById("VisitorName").value)}&email=${encodeURIComponent(email)}`;
-      window.location.href = url;
+      const url = `ThankYou-Checkin.html?visid=${encodeURIComponent(result.VisitingID)}&name=${encodeURIComponent(document.getElementById("VisitorName").value)}&email=${encodeURIComponent(email)}`;
+window.location.href = url;
+
 
 
       document.getElementById("result").textContent =

@@ -221,12 +221,15 @@
       }
 
       const result = await res.json();
-      if (result.VisitingID) {
-        const url = `ThankYou-Checkin.html?visid=${encodeURIComponent(result.VisitingID)}&name=${encodeURIComponent(body.VisitorName)}&email=${encodeURIComponent(email)}`;
-        window.location.href = url;
-      } else {
-        alert("Something went wrong. Please try again.");
-  }
+      const url = `ThankYou-Checkin.html?visid=${encodeURIComponent(result.VisitingID)}&name=${encodeURIComponent(body.VisitorName)}&email=${encodeURIComponent(email)}`;
+      window.location.href = url;
+      
+  //     if (result.VisitingID) {
+  //       const url = `ThankYou-Checkin.html?visid=${encodeURIComponent(result.VisitingID)}&name=${encodeURIComponent(body.VisitorName)}&email=${encodeURIComponent(email)}`;
+  //       window.location.href = url;
+  //     } else {
+  //       alert("Something went wrong. Please try again.");
+  // }
 
 
 

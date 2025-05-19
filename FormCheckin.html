@@ -215,8 +215,12 @@
       });
 
       const result = await res.json();
-      const url = `ThankYou-Checkin.html?visid=${encodeURIComponent(result.VisitingID)}&name=${encodeURIComponent(document.getElementById("VisitorName").value)}&email=${encodeURIComponent(email)}`;
-window.location.href = url;
+      if (result.VisitingID) {
+        const url = `ThankYou-Checkin.html?visid=${encodeURIComponent(result.VisitingID)}&name=${encodeURIComponent(body.VisitorName)}&email=${encodeURIComponent(email)}`;
+        window.location.href = url;
+      } else {
+        alert("Something went wrong. Please try again.");
+  }
 
 
 

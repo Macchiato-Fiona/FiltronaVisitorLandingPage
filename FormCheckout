@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Filtrona Visitor Check-Out</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #e6f0ff, #ffffff);
+      color: #333;
+      margin: 0;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .logo {
+      max-height: 80px;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      color: #004578;
+      font-size: 32px;
+      margin-bottom: 5px;
+      text-align: center;
+    }
+
+    .subtitle {
+      font-size: 18px;
+      color: #666;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    form {
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 640px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    label {
+      width: 100%;
+      font-weight: bold;
+      margin-top: 15px;
+      text-align: left;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+
+    .help-text {
+      font-size: 13px;
+      color: #666;
+      margin-top: 2px;
+      margin-bottom: 10px;
+      width: 100%;
+      text-align: left;
+    }
+
+    button {
+      margin-top: 25px;
+      padding: 12px 24px;
+      font-size: 18px;
+      background-color: rgba(0, 150, 218, 1);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #0074b8;
+    }
+
+    .success {
+      margin-top: 20px;
+      font-weight: bold;
+      color: #107c10;
+    }
+
+    .error {
+      color: red;
+      font-size: 14px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <img class="logo" src="Filtrona_removebg.png" alt="Filtrona Logo" />
+
+  <h1>Visitor Check-Out</h1>
+  <p class="subtitle">Please enter your Visiting ID and Name to check out</p>
+
+  <form id="checkoutForm">
+    <label for="VisitingID">Visiting ID:</label>
+    <input type="text" id="VisitingID" required>
+    <div class="help-text">The ID you received during check-in (e.g., V-SG01-001-MF)</div>
+
+    <label for="VisitorName">Visitor Name:</label>
+    <input type="text" id="VisitorName" required>
+    <div class="help-text">Your full name as entered during check-in</div>
+
+    <button type="submit">Check Out</button>
+  </form>
+
+  <div id="result" class="success"></div>
+  <div id="error" class="error"></div>
+
+  <script>
+    document.getElementById("checkoutForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+      document.getElementById("error").textContent = "";
+      document.getElementById("result").textContent = "";
+
+      const body = {
+        VisitingID: document.getElementById("VisitingID").value,
+        VisitorName: document.getElementById("VisitorName").value,
+        SiteCode: "SG01"
+      };
+
+      const res = await fetch("https://fionaaa.pythonanywhere.com/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+
+      const result = await res.json();
+
+      if (result.success) {
+        document.getElementById("result").textContent = "✅ Check-Out successful. Thank you!";
+      } else {
+        document.getElementById("error").textContent = "❌ " + result.message;
+      }
+
+      document.getElementById("checkoutForm").reset();
+    });
+  </script>
+
+</body>
+</html>

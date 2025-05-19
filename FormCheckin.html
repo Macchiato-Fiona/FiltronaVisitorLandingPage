@@ -215,6 +215,10 @@
       });
 
       const result = await res.json();
+      const url = `thank-you.html?visid=${encodeURIComponent(result.VisitingID)}&name=${encodeURIComponent(document.getElementById("VisitorName").value)}&email=${encodeURIComponent(email)}`;
+      window.location.href = url;
+
+
       document.getElementById("result").textContent =
         `✅ Check-In Successful. Your Visiting ID is: ${result.VisitingID}`;
       document.getElementById("checkinForm").reset();

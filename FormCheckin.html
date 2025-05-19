@@ -215,7 +215,7 @@
       });
 
       const result = await res.json();
-      const url = `thank-you.html?visid=${encodeURIComponent(result.VisitingID)}&name=${encodeURIComponent(document.getElementById("VisitorName").value)}&email=${encodeURIComponent(email)}`;
+      const url = `ThankYou.html?visid=${encodeURIComponent(result.VisitingID)}&name=${encodeURIComponent(document.getElementById("VisitorName").value)}&email=${encodeURIComponent(email)}`;
       window.location.href = url;
 
 

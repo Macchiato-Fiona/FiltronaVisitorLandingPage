@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Visitor Check-Out Result</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #e6f0ff, #ffffff);
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 60px 20px;
+    }
+    .logo {
+      max-height: 80px;
+      margin-bottom: 30px;
+    }
+    .box {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      max-width: 600px;
+      text-align: center;
+    }
+    .message {
+      font-size: 20px;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+    .success {
+      color: #107c10;
+    }
+    .error {
+      color: #c50f1f;
+    }
+    .followup {
+      margin-top: 20px;
+      font-size: 16px;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+
+  <img class="logo" src="Filtrona_removebg.png" alt="Filtrona Logo" />
+  <div class="box">
+    <h2>Check-Out Result</h2>
+    <p id="msg" class="message"></p>
+    <p id="followup" class="followup" style="display: none;">Thank you for visiting. We hope to see you again soon! 👋</p>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const type = params.get("type");
+    const message = decodeURIComponent(params.get("msg") || "");
+
+    const msgEl = document.getElementById("msg");
+    const followup = document.getElementById("followup");
+
+    msgEl.textContent = message;
+
+    if (type === "success") {
+      msgEl.classList.add("success");
+      followup.style.display = "block";
+    } else {
+      msgEl.classList.add("error");
+    }
+  </script>
+
+</body>
+</html>

@@ -126,7 +126,7 @@
 
   <form id="checkinForm">
     <label for="VisitorName">Visitor Name:</label>
-    <input type="text" id="VisitorName" required>
+    <input type="text" id="Visito1rName" required>
     <div class="help-text">e.g. Fiona Cosimo WRIGHT - Full name with first letter and Last Name CAPITALIZED</div>
 
     <label for="Company">Company Name:</label>
@@ -191,8 +191,8 @@
     document.getElementById("checkinForm").addEventListener("submit", async function(e) {
       e.preventDefault();
 
-      const email = emailInput.value;
-      const reEmail = reEmailInput.value;
+      const email = document.getElementById("Email").value;
+      const reEmail = document.getElementById("ReEmail").value;
 
       if (email.trim().toLowerCase() !== reEmail.trim().toLowerCase()) {
         alert("❌ Emails do not match. Please check again.");
@@ -203,16 +203,22 @@
         VisitorName: document.getElementById("VisitorName").value,
         Company: document.getElementById("Company").value,
         Email: email,
+        ReEmail: reEmail,
         PhoneNumber: document.getElementById("PhoneNumber").value,
         HostName: document.getElementById("HostName").value,
         SiteCode: "SG01"
       };
 
-      const res = await fetch("https://fionaaa.pythonanywhere.com/checkin", {
+      const res = await fetch("https://defaultf93814974e884be4bd0e5cbbd3c9e4.25.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/1834a655f59d4024aeb731d08e618997/triggers/manual/paths/invoke/?api-version=1&tenantId=tId&environmentName=Default-f9381497-4e88-4be4-bd0e-5cbbd3c9e425&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=rJxsFQjz-55IWxKtBpjwmQRMtVJHQoYjHK-fWugmvC4", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body)
       });
+
+      if (!res.ok) {
+        alert("There was a problem with submission.");
+        return;
+      }
 
       const result = await res.json();
       if (result.VisitingID) {

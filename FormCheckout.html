@@ -63,10 +63,10 @@
       font-size: 16px;
     }
 
-    input.error-field {
+    /* input.error-field {
       background-color: #ffe5e5;
       border-color: #cc0000;
-    }
+    } */
 
     .help-text {
       font-size: 13px;
@@ -93,84 +93,90 @@
       background-color: #0074b8;
     }
 
-    .error {
+    /* .error {
       color: #c50f1f;
       font-size: 15px;
       margin-top: 10px;
+    } */
+
+     #loadingOverlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255,255,255,0.95);
+      z-index: 9999;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+    .spinner {
+      border: 6px solid #ccc;
+      border-top: 6px solid #004578;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+      margin-top: 20px;
+    }
+
+     @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
   </style>
 </head>
 <body>
+
+<div id="loadingOverlay">
+  <img src="Filtrona_removebg.png" alt="Filtrona Logo" style="max-height: 80px; margin-bottom: 20px;">
+  <div class="spinner"></div>
+  <h2 style="color:#004578; margin-top: 20px;">Processing your check-out...</h2>
+</div>
+
   <img class="logo" src="Filtrona_removebg.png" alt="Filtrona Logo" />
   <h1>Visitor Check-Out</h1>
-  <p id="subtitle" class="subtitle">Please fill in the fields below to check out</p>
+  <p id="subtitle" class="subtitle">Please enter your Visiting ID and name to check out</p>
 
   <form id="checkoutForm">
     <label for="VisitingID">Visiting ID:</label>
     <input type="text" id="VisitingID" required>
-    <div class="help-text">The ID you received during check-in (e.g., V-SG01-001-MF)</div>
+    <div class="help-text">As shown in your check-in confirmation (e.g. V-SG01-001-MQ)</div>
 
     <label for="VisitorName">Visitor Name:</label>
     <input type="text" id="VisitorName" required>
     <div class="help-text">Your full name as entered during check-in</div>
 
     <button type="submit">Check Out</button>
-    <div id="errorMsg" class="error"></div>
   </form>
 
   <script>
-    const params = new URLSearchParams(window.location.search);
-    const errorType = params.get('type');
-    const errorMsg = decodeURIComponent(params.get('msg') || '');
-    const visid = decodeURIComponent(params.get('visid') || '');
-    const name = decodeURIComponent(params.get('name') || '');
-
-    const visidInput = document.getElementById("VisitingID");
-    const nameInput = document.getElementById("VisitorName");
-    const errorDiv = document.getElementById("errorMsg");
-    const subtitle = document.getElementById("subtitle");
-
-    visidInput.value = visid;
-    nameInput.value = name;
-
-    if (errorType === "id_error") {
-      visidInput.classList.add("error-field");
-      subtitle.textContent = "Please double check the fields highlighted below and try again.";
-    } else if (errorType === "name_error") {
-      nameInput.classList.add("error-field");
-      subtitle.textContent = "Please double check the fields highlighted below and try again.";
-    }
-
-    if (errorMsg) {
-      errorDiv.textContent = errorMsg;
-    }
-
     document.getElementById("checkoutForm").addEventListener("submit", async function(e) {
-      e.preventDefault();
-      errorDiv.textContent = '';
-      visidInput.classList.remove("error-field");
-      nameInput.classList.remove("error-field");
+    e.preventDefault();
 
-      const body = {
-        VisitingID: visidInput.value,
-        VisitorName: nameInput.value,
-        SiteCode: "SG01"
-      };
+    const id = document.getElementById("VisitingID").value.trim();
+    const name = document.getElementById("VisitorName").value.trim();
 
-      const res = await fetch("https://fionaaa.pythonanywhere.com/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body)
-      });
+    document.getElementById("loadingOverlay").style.display = "flex";
 
-      const result = await res.json();
-      if (result.success) {
-        window.location.href = `ThankYou-Checkout.html?msg=${encodeURIComponent(result.message)}&type=success`;
-      } else {
-        const backURL = `FormCheckout.html?type=${result.type}&msg=${encodeURIComponent(result.message)}&visid=${encodeURIComponent(body.VisitingID)}&name=${encodeURIComponent(body.VisitorName)}`;
-        window.location.href = backURL;
-      }
+    const body = {
+      VisitingID: id,
+      VisitorName: name
+    };
+
+    const res = await fetch("https://defaultf93814974e884be4bd0e5cbbd3c9e4.25.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/ca5a90da48b74975b5ddde28a3f5b596/triggers/manual/paths/invoke/?api-version=1&tenantId=tId&environmentName=Default-f9381497-4e88-4be4-bd0e-5cbbd3c9e425&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=G3pIjoLd18etCRsNKv2ES1G-zJcDnIQLb0i6gwmWjaQ", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body)
     });
+
+    const result = await res.json();
+    const url = `ThankYou-Checkout.html?type=${encodeURIComponent(result.type)}&msg=${encodeURIComponent(result.msg)}`;
+    window.location.href = url;
+  });
+</script>
   </script>
 </body>
 </html>

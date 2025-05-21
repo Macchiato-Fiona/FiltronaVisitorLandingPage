@@ -129,6 +129,23 @@
       flex-direction: column;
       font-family: 'Segoe UI', sans-serif;
     }
+    #loadingOverlay { 
+      position: fixed; 
+      top: 0; 
+      left: 0; 
+      width: 100%; 
+      height: 100%; 
+      background: rgba(255,255,255,0.95); 
+      z-index: 9999; 
+      display: flex; 
+      justify-content: 
+      center; align-items: 
+      center; flex-direction: 
+      column; 
+    }
+
+.spinner { border: 6px solid #ccc; border-top: 6px solid #004578; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin-top: 20px; }
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
     .overlay-backdrop {
       position: absolute;
@@ -145,15 +162,14 @@
       z-index: 1001;
       color: #004578;
     }
+    .overlay-content h2 { 
+      color: #004578; 
+      margin-top: 20px; 
+    }
 
     .overlay-logo {
       max-height: 80px;
       margin-bottom: 20px;
-    }
-
-    .overlay-content h2 {
-      font-size: 26px;
-      margin-bottom: 10px;
     }
 
     .overlay-content p {
@@ -167,6 +183,7 @@
   <div class="overlay-backdrop"></div>
   <div class="overlay-content">
     <img src="Filtrona_removebg.png" alt="Filtrona Logo" class="overlay-logo">
+    <div class="spinner"></div>
     <h2>Registering your visit...</h2>
     <p>Please wait for a second</p>
   </div>
@@ -205,9 +222,8 @@
     <input type="text" id="HostName" required>
     <div class="help-text">Who are you visiting? Enter the full name if possible</div>
 
-    <label for="Consent"><i>Visitor Consent</i></label>
-    <div class="help-text">Please understand that by submitting this form, you consent your information being collected by Filtrona for private & encrypted record.</div>
-
+    <label><input type="checkbox" id="Consent" required>I consent my information being collected by Filtrona for private & encrypted record</label>
+    
     <button type="submit">Check-in</button>
   </form>
   
@@ -244,48 +260,54 @@
     reEmailInput.addEventListener("input", checkEmailMatch);
     emailInput.addEventListener("input", checkEmailMatch);
 
-    document.getElementById("checkinForm").addEventListener("submit", async function(e) {
-      e.preventDefault();
+document.getElementById("checkinForm").addEventListener("submit", async function(e) {
+  e.preventDefault();
 
-      document.getElementById("loadingOverlay").style.display = "flex";
+  const email = document.getElementById("Email").value.trim().toLowerCase();
+  const reEmail = document.getElementById("ReEmail").value.trim().toLowerCase();
+  const consent = document.getElementById("Consent").checked;
 
-      const email = document.getElementById("Email").value;
-      const reEmail = document.getElementById("ReEmail").value;
+  if (email !== reEmail) {
+    alert("❌ Emails do not match. Please check again.");
+    return;
+  }
 
-      if (email.trim().toLowerCase() !== reEmail.trim().toLowerCase()) {
-        alert("❌ Emails do not match. Please check again.");
-        return;
-      }
+  if (!consent) {
+    alert("❌ Please agree to the consent policy to proceed.");
+    return;
+  }
 
-      const body = {
-        VisitorName: document.getElementById("VisitorName").value,
-        Company: document.getElementById("Company").value,
-        Email: email,
-        ReEmail: reEmail,
-        PhoneNumber: document.getElementById("PhoneNumber").value,
-        HostName: document.getElementById("HostName").value,
-        SiteCode: "SG01"
-      };
+  // Show loading overlay after validation passes
+  document.getElementById("loadingOverlay").style.display = "flex";
 
-      const res = await fetch("https://defaultf93814974e884be4bd0e5cbbd3c9e4.25.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/1834a655f59d4024aeb731d08e618997/triggers/manual/paths/invoke/?api-version=1&tenantId=tId&environmentName=Default-f9381497-4e88-4be4-bd0e-5cbbd3c9e425&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=rJxsFQjz-55IWxKtBpjwmQRMtVJHQoYjHK-fWugmvC4", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body)
-      });
+  const body = {
+    VisitorName: document.getElementById("VisitorName").value,
+    Company: document.getElementById("Company").value,
+    Email: email,
+    ReEmail: reEmail,
+    PhoneNumber: document.getElementById("PhoneNumber").value,
+    HostName: document.getElementById("HostName").value,
+    SiteCode: "SG01",
+    Consent: true
+  };
 
-      if (!res.ok) {
-        alert("There was a problem with submission.");
-        return;
-      }
+  const res = await fetch("https://defaultf93814974e884be4bd0e5cbbd3c9e4.25.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/1834a655f59d4024aeb731d08e618997/triggers/manual/paths/invoke/?api-version=1&tenantId=tId&environmentName=Default-f9381497-4e88-4be4-bd0e-5cbbd3c9e425&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=rJxsFQjz-55IWxKtBpjwmQRMtVJHQoYjHK-fWugmvC4", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body)
+  });
 
-      const result = await res.json();
-      const url = `ThankYou-Checkin.html?visid=${encodeURIComponent(result.VisitingID)}&name=${encodeURIComponent(body.VisitorName)}&email=${encodeURIComponent(email)}`;
-      window.location.href = url;
-      return;
+  if (!res.ok) {
+    alert("❌ There was a problem with submission. Please try again later.");
+    document.getElementById("loadingOverlay").style.display = "none";
+    return;
+  }
 
-      document.getElementById("checkinForm").reset();
-      emailStatus.textContent = "";
-    });
+  const result = await res.json();
+  const url = `ThankYou-Checkin.html?visid=${encodeURIComponent(result.VisitingID)}&name=${encodeURIComponent(body.VisitorName)}&email=${encodeURIComponent(email)}`;
+  window.location.href = url;
+});
+
   </script>
 
 </body>

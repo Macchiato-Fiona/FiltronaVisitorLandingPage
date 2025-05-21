@@ -153,19 +153,20 @@
   </form>
 
   <script>
-    document.getElementById("checkoutForm").addEventListener("submit", async function(e) {
-    e.preventDefault();
+document.getElementById("checkoutForm").addEventListener("submit", async function(e) {
+  e.preventDefault();
 
-    const id = document.getElementById("VisitingID").value.trim();
-    const name = document.getElementById("VisitorName").value.trim();
+  const id = document.getElementById("VisitingID").value.trim();
+  const name = document.getElementById("VisitorName").value.trim();
 
-    document.getElementById("loadingOverlay").style.display = "flex";
+  document.getElementById("loadingOverlay").style.display = "flex";
 
-    const body = {
-      VisitingID: id,
-      VisitorName: name
-    };
+  const body = {
+    VisitingID: id,
+    VisitorName: name
+  };
 
+  try {
     const res = await fetch("https://defaultf93814974e884be4bd0e5cbbd3c9e4.25.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/ca5a90da48b74975b5ddde28a3f5b596/triggers/manual/paths/invoke/?api-version=1&tenantId=tId&environmentName=Default-f9381497-4e88-4be4-bd0e-5cbbd3c9e425&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=G3pIjoLd18etCRsNKv2ES1G-zJcDnIQLb0i6gwmWjaQ", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -173,9 +174,21 @@
     });
 
     const result = await res.json();
-    const url = `ThankYou-Checkout.html?type=${encodeURIComponent(result.type)}&msg=${encodeURIComponent(result.msg)}`;
+
+    // Use fallback message if result is incomplete
+    const type = result.type || (res.ok ? "success" : "error");
+    const msg = result.msg || (res.ok ? "Check-out successful." : "❌ An error occurred. Please try again.");
+
+    const url = `ThankYou-Checkout.html?type=${encodeURIComponent(type)}&msg=${encodeURIComponent(msg)}`;
     window.location.href = url;
-  });
+
+  } catch (err) {
+    document.getElementById("loadingOverlay").style.display = "none";
+    alert("❌ Something went wrong while checking out. Please try again later.");
+    console.error("Checkout Error:", err);
+  }
+});
+
 </script>
   </script>
 </body>

@@ -176,6 +176,12 @@
       font-size: 16px;
       color: #555;
     }
+
+    .required {
+      color: rgba(255, 0, 0, 0.676);
+      margin-left: 2px;
+    }
+
   </style>
 </head>
 
@@ -198,27 +204,27 @@
   <p class="subtitle">Please complete the form to check in</p>
 
   <form id="checkinForm">
-    <label for="VisitorName">Visitor Name:</label>
+    <label for="VisitorName">Visitor Name<span class="required">*</span></label>
     <input type="text" id="VisitorName" required>
     <div class="help-text">e.g. Fiona Cosimo WRIGHT - Full name with first letter and Last Name CAPITALIZED</div>
 
-    <label for="Company">Company Name:</label>
+    <label for="Company">Company Name<span class="required">*</span></label>
     <input type="text" id="Company" required>
     <div class="help-text">Your company's full name</div>
 
-    <label for="Email">Email:</label>
+    <label for="Email">Email<span class="required">*</span></label>
     <input type="email" id="Email" required>
     <div class="help-text">Valid email for check-in confirmation and contact</div>
 
-    <label for="ReEmail">Re-enter Email:</label>
+    <label for="ReEmail">Re-enter Email<span class="required">*</span></label>
     <input type="email" id="ReEmail" required>
     <div id="emailStatus" class="email-match"></div>
 
-    <label for="PhoneNumber">Phone:</label>
+    <label for="PhoneNumber">Phone</label>
     <input type="text" id="PhoneNumber">
     <div class="help-text">Optional: A mobile number for contact if needed</div>
 
-    <label for="HostName">Host Name:</label>
+    <label for="HostName">Host Name<span class="required">*</span></label>
     <input type="text" id="HostName" required>
     <div class="help-text">Who are you visiting? Enter the full name if possible</div>
 

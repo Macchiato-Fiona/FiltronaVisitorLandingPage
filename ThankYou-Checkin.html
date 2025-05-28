@@ -46,14 +46,50 @@
     <p class="highlight" id="visid"></p>
     <p class="email">A confirmation has been sent to <strong id="email"></strong>. Please take a <b>screenshot</b> if needed.</p>
     <p style="margin-top: 30px;"><a href="https://macchiato-fiona.github.io/FiltronaVisitorLandingPage/LandingPage.html"><< Back to the landing page</a></p>
-
   </div>
+
+  <div class="checkout-box">
+  <p>You can check out immediately from here after your visit if you <b>keep this page</b>.</p>
+  <button id="quickCheckout" style="padding: 12px 24px; font-size: 16px; background-color: rgba(0, 150, 218, 1); color: white; border: none; border-radius: 8px; cursor: pointer;">
+  🔲 Check Out Now
+</button>
+</div>
+
 
   <script>
     const params = new URLSearchParams(window.location.search);
-    document.getElementById("name").textContent = "Your Name: " + decodeURIComponent(params.get("name"));
-    document.getElementById("visid").textContent = "Record Number: " + decodeURIComponent(params.get("visid"));
-    document.getElementById("email").textContent = decodeURIComponent(params.get("email"));
+    const name = decodeURIComponent(params.get("name"));
+    const visid = decodeURIComponent(params.get("visid"));
+    const email = decodeURIComponent(params.get("email"));
+
+    document.getElementById("name").textContent = "Your Name: " + name;
+    document.getElementById("visid").textContent = "Record Number: " + visid;
+    document.getElementById("email").textContent = email;
+
+    document.getElementById("quickCheckout").addEventListener("click", async () => {
+    const body = {
+      VisitingID: visid,
+      Email: email
+    };
+
+    const url = "https://defaultf93814974e884be4bd0e5cbbd3c9e4.25.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/ca5a90da48b74975b5ddde28a3f5b596/triggers/manual/paths/invoke/?api-version=1&tenantId=tId&environmentName=Default-f9381497-4e88-4be4-bd0e-5cbbd3c9e425&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=G3pIjoLd18etCRsNKv2ES1G-zJcDnIQLb0i6gwmWjaQ";
+
+    try {
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+
+      const result = await res.json();
+      const redirectUrl = `ThankYou-Checkout.html?type=${encodeURIComponent(result.type)}&msg=${encodeURIComponent(result.msg)}`;
+      window.location.href = redirectUrl;
+
+    } catch (err) {
+      alert("❌ Unable to quick check out, lease scan again.");
+    }
+  });
+
   </script>
 
 </body>

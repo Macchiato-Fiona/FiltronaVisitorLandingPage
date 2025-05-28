@@ -4,17 +4,18 @@
   <meta charset="UTF-8" />
   <title>Thank You - Filtrona Visitor</title>
   <style>
+
   body {
     font-family: 'Segoe UI', sans-serif;
     background: linear-gradient(135deg, #e6f0ff, #ffffff);
     color: #333;
     margin: 0;
-    padding: 60px 20px;
+    padding: 40px 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-height: 100vh;
-    box-sizing: border-box;
+    font-size: 18px;
+    line-height: 1.6;
   }
 
   .logo {
@@ -24,12 +25,18 @@
 
   .box {
     background: white;
-    padding: 30px 20px;
+    padding: 35px;
     border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    max-width: 600px;
+    box-shadow: 0 0 14px rgba(0,0,0,0.1);
     width: 100%;
+    max-width: 700px;
     text-align: center;
+  }
+
+    h2 {
+    font-size: 28px;
+    color: #004578;
+    margin-bottom: 20px;
   }
 
   .highlight {
@@ -112,11 +119,10 @@
       width: 100%;
       justify-content: center;
     }
+
   }
-</style>
-
-
   </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 </head>
 <body>
 
@@ -130,7 +136,7 @@
   </div>
 
   <div class="checkout-box">
-  <p>You can check out immediately from here after your visit if you <b>keep this page</b>.</p>
+  <p>Check out immediately after your visit by <b>keeping this page</b></p>
   <button id="quickCheckout">
   <span class="btn-text">🔲 Check Out Now</span>
   <span class="spinner" style="display: none;"></span>
@@ -185,7 +191,6 @@
     }
   });
 </script>
-
 
 </body>
 </html>

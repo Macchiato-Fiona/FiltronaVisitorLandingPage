@@ -107,16 +107,25 @@
 
 
   <script>
-    const params = new URLSearchParams(window.location.search);
-    const name = decodeURIComponent(params.get("name"));
-    const visid = decodeURIComponent(params.get("visid"));
-    const email = decodeURIComponent(params.get("email"));
+  const params = new URLSearchParams(window.location.search);
+  const name = decodeURIComponent(params.get("name"));
+  const visid = decodeURIComponent(params.get("visid"));
+  const email = decodeURIComponent(params.get("email"));
 
-    document.getElementById("name").textContent = "Your Name: " + name;
-    document.getElementById("visid").textContent = "Record Number: " + visid;
-    document.getElementById("email").textContent = email;
+  document.getElementById("name").textContent = "Your Name: " + name;
+  document.getElementById("visid").textContent = "Record Number: " + visid;
+  document.getElementById("email").textContent = email;
 
-    document.getElementById("quickCheckout").addEventListener("click", async () => {
+  const checkoutBtn = document.getElementById("quickCheckout");
+  const btnText = checkoutBtn.querySelector(".btn-text");
+  const spinner = checkoutBtn.querySelector(".spinner");
+
+  checkoutBtn.addEventListener("click", async () => {
+    // Disable button and show spinner
+    checkoutBtn.disabled = true;
+    btnText.style.display = "none";
+    spinner.style.display = "inline-block";
+
     const body = {
       VisitingID: visid,
       Email: email
@@ -136,12 +145,14 @@
       window.location.href = redirectUrl;
 
     } catch (err) {
-      alert("❌ Unable to quick check out, lease scan again.");
+      alert("❌ Unable to quick check out. Please scan again.");
+      checkoutBtn.disabled = false;
+      btnText.style.display = "inline";
+      spinner.style.display = "none";
     }
-
   });
+</script>
 
-  </script>
 
 </body>
 </html>
